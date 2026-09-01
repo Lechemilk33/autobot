@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How ShiftMath Works — Methodology, Sources &amp; Limits</title>
+<meta name="description" content="Exactly how ShiftMath calculates the tips and overtime deductions, which IRS sources every number comes from, and what the tools can't tell you.">
+<link rel="canonical" href="https://lechemilk33.github.io/shiftmath/methodology.html">
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="./"><svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="14" fill="#1c6b4a"/><path d="M32 46V22" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round"/><path d="M22 30l10-10 10 10" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="32" cy="52" r="3.2" fill="#daa032"/></svg>ShiftMath</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Calculator</a>
+      <a href="w2-codes.html">W-2 codes</a>
+      <a href="1099.html">1099 checker</a>
+      <a href="employers.html">For employers</a>
+      <a href="methodology.html" aria-current="page">How it works</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="section-label">Methodology</p>
+    <h1>Where every number <span class="accent">comes from</span>.</h1>
+    <p class="lede">A tax tool you can't check is a tax tool you shouldn't trust. Here is exactly what ShiftMath computes, the government sources each rule is taken from, and — just as important — what it doesn't do.</p>
+  </section>
+
+  <section class="card">
+    <h2>The tips &amp; overtime calculator</h2>
+    <p>The 2025 tax law (usually called the One Big Beautiful Bill Act) created two temporary federal deductions for tax years 2025 through 2028:</p>
+    <ul>
+      <li><strong>Tips:</strong> up to $25,000 per return of voluntary tips earned in one of 71 listed occupations. The cap is the same whether you file alone or jointly. Self-employed workers can claim it too, limited to the net profit of the business the tips came from.</li>
+      <li><strong>Overtime:</strong> up to $12,500 ($25,000 on a joint return) of the <em>premium portion</em> of overtime required by federal law — the extra "half" of time-and-a-half, for hours past 40 in a week. Overtime that only exists because of a state law, daily-overtime rule, or contract doesn't qualify, and salaried-exempt workers aren't eligible.</li>
+      <li><strong>Both deductions:</strong> shrink by $100 for every $1,000 of income above $150,000 ($300,000 joint), require a Social Security number, exclude married-filing-separately, stack on top of the standard deduction, and reduce <em>federal income tax only</em> — Social Security and Medicare taxes still apply in full.</li>
+    </ul>
+    <p>The calculator applies the caps and the phase-down, subtracts the year's standard deduction from your income, and computes tax before and after using the actual federal tax brackets for the year you pick. The savings figure is the exact difference — including when a deduction crosses into a lower bracket, which flat "deduction × tax rate" shortcuts get wrong.</p>
+    <h3>Primary sources</h3>
+    <ul class="small">
+      <li>IRS, <a href="https://www.irs.gov/newsroom/what-the-no-tax-on-tips-deduction-means-for-you" rel="noopener">"What the 'No Tax on Tips' deduction means for you"</a></li>
+      <li>IRS Fact Sheet FS-2026-13 (August 2026), <a href="https://www.irs.gov/pub/taxpros/fs-2026-13.pdf" rel="noopener">overtime deduction FAQ</a> — including the worked example our tests reproduce</li>
+      <li>IRS, <a href="https://www.irs.gov/newsroom/one-big-beautiful-bill-how-to-take-advantage-of-no-tax-on-tips-and-overtime" rel="noopener">phase-down mechanics</a>, and <a href="https://www.irs.gov/pub/irs-drop/n-25-69.pdf" rel="noopener">Notice 2025-69</a> (2025 transition rules)</li>
+      <li>IRS Rev. Proc. 2025-32, <a href="https://www.irs.gov/pub/irs-drop/rp-25-32.pdf" rel="noopener">2026 brackets and standard deduction</a></li>
+      <li>Treasury final rule TD 10044, <a href="https://www.federalregister.gov/documents/2026/04/13/2026-07104/occupations-that-customarily-and-regularly-received-tips-definition-of-qualified-tips" rel="noopener">the occupation list</a></li>
+    </ul>
+    <h3>What it doesn't do</h3>
+    <p>It doesn't see your full return: credits, itemized deductions, retirement contributions, other income types, or state taxes. It treats the income you enter as ordinary income with the standard deduction, and it can't verify that your tips or overtime legally qualify. One fine point: the law says the phase-down is "$100 for each $1,000" over the limit — we apply it smoothly (10% of every dollar over), matching the IRS worksheet; if the final instructions round in steps, results near the thresholds could differ by up to $100.</p>
+  </section>
+
+  <section class="card" id="occupations">
+    <h2>The 71 tipped occupations</h2>
+    <p>Tips only qualify if your job is on Treasury's official list (final rule, April 2026). The categories, with examples:</p>
+    <div class="table-scroll"><table id="occ-table"><thead><tr><th>Category</th><th>Occupations</th></tr></thead><tbody></tbody></table></div>
+    <p class="small">On your 2026 W-2, the job appears as a 3-digit code in Box 14b. Code 000 means the job isn't on the list.</p>
+  </section>
+
+  <section class="card">
+    <h2>The 1099 checker</h2>
+    <p>Federal rules: payment apps and marketplaces report on Form 1099-K once you pass <strong>both</strong> $20,000 and 200 transactions in a year (restored by the 2025 law; IRS Fact Sheet <a href="https://www.irs.gov/newsroom/irs-issues-faqs-on-form-1099-k-threshold-under-the-one-big-beautiful-bill-dollar-limit-reverts-to-20000" rel="noopener">FS-2025-08</a>). Card payments processed for you as a merchant are reported from the first dollar (<a href="https://www.irs.gov/businesses/understanding-your-form-1099-k" rel="noopener">IRS</a>). Clients who pay you directly send Form 1099-NEC at $600 for 2025, rising to $2,000 for 2026.</p>
+    <p>Eleven states require reporting at lower levels, which platforms apply based on where you live. For Massachusetts, Vermont, Virginia, Maryland, and Illinois we verified the state's own statute or guidance. For New Jersey, Missouri, Arkansas, D.C., Montana, and Rhode Island the figures come from platform policies and tax publishers — the checker tells you when a result rests on one of those, and for Montana and Rhode Island specifically we flag that the state itself hasn't published the number we could verify.</p>
+    <p>The checker predicts paperwork, not taxes. Income is taxable with or without a form.</p>
+  </section>
+
+  <section class="card">
+    <h2>The employer overtime splitter</h2>
+    <p>Implements the IRS weekly formula for qualified overtime — overtime hours × ½ × the regular rate (FS-2026-13, Q12) — and nothing else. It flags rows paid below time-and-a-half and never counts pay above the required premium (double time doesn't increase code TT). It cannot determine whether an employee is covered by federal overtime law, and it takes your regular rate as given — if you pay nondiscretionary bonuses or differentials, fold them into the regular rate first.</p>
+  </section>
+
+  <section class="card">
+    <h2>Testing &amp; privacy</h2>
+    <p>Every rule above is covered by an automated test suite that reproduces the IRS's and major tax publishers' own worked examples — including the $20/hour double-time example from the IRS employer FAQ and the phase-down examples — and the suite must pass before any update ships. Everything runs in your browser: no accounts, no analytics that read your numbers, and nothing you type ever leaves your device. You can verify that yourself — open your browser's developer tools and watch the network tab while you use the tools.</p>
+    <p class="small">ShiftMath is educational. It isn't tax, legal, or financial advice, and it isn't a substitute for a professional who can see your whole situation. Rules current as of September 2026; the law itself expires after tax year 2028.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="foot-logo">ShiftMath</div>
+        <p>Plain-word money math for people who work shifts.</p>
+      </div>
+      <div>
+        <p><a href="./">Tips &amp; overtime calculator</a> · <a href="w2-codes.html">W-2 code decoder</a><br>
+        <a href="1099.html">1099 checker</a> · <a href="employers.html">For employers</a></p>
+      </div>
+    </div>
+    <p class="legal">ShiftMath provides estimates for education, not tax, legal, or financial advice. Confirm anything important with a tax professional or IRS.gov.</p>
+  </div>
+</footer>
+
+<script type="module">
+import { TTOC } from "./js/tax_data.js";
+const tbody = document.querySelector("#occ-table tbody");
+for (const group of Object.values(TTOC)) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td><strong>${group.category}</strong></td><td>${Object.values(group.occupations).join(" · ")}</td>`;
+  tbody.appendChild(tr);
+}
+</script>
+</body>
+</html>

@@ -105,6 +105,12 @@ body {
 }
 .site-nav a:hover { background: var(--surface-2); color: var(--ink); }
 .site-nav a[aria-current="page"] { background: var(--green-tint); color: var(--green-deep); }
+@media (max-width: 700px) {
+  .site-header { position: static; }
+  .site-header .bar { flex-wrap: wrap; gap: 4px 8px; padding: 10px 0; }
+  .site-nav { margin-left: 0; width: 100%; }
+  .site-nav a { font-size: 13px; padding: 5px 9px; }
+}
 
 /* ---------- hero ---------- */
 .hero { padding: 52px 0 8px; }

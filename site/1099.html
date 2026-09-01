@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Will I Get a 1099 This Year? — 2025 &amp; 2026 Thresholds by State | ShiftMath</title>
+<meta name="description" content="The federal 1099-K threshold is back to $20,000 — but 11 states use much lower limits, and freelance 1099-NEC rules changed for 2026. Check what forms to expect from eBay, Etsy, PayPal, Venmo, Uber and more.">
+<link rel="canonical" href="https://lechemilk33.github.io/shiftmath/1099.html">
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<link rel="stylesheet" href="css/styles.css">
+<meta property="og:title" content="Will I get a 1099 this year?">
+<meta property="og:description" content="Check the 2025/2026 federal and state 1099 rules for your selling and gig income in 30 seconds.">
+<meta property="og:type" content="website">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="./"><svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="14" fill="#1c6b4a"/><path d="M32 46V22" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round"/><path d="M22 30l10-10 10 10" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="32" cy="52" r="3.2" fill="#daa032"/></svg>ShiftMath</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Calculator</a>
+      <a href="w2-codes.html">W-2 codes</a>
+      <a href="1099.html" aria-current="page">1099 checker</a>
+      <a href="employers.html">For employers</a>
+      <a href="methodology.html">How it works</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="section-label">1099 checker · tax years 2025 &amp; 2026</p>
+    <h1>Will the apps send you a <span class="accent">1099</span> this year?</h1>
+    <p class="lede">The reporting rules changed <em>again</em>. The federal line for payment apps and marketplaces is back up to $20,000 — but 11 states make platforms report at $600–$2,500, and the threshold for freelance clients jumps from $600 to $2,000 in 2026. Thirty seconds here beats a surprise in January.</p>
+    <div class="badge-row">
+      <span class="badge green">Free · no signup</span>
+      <span class="badge">Nothing you enter leaves your device</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Check your situation</h2>
+    <div class="grid-2">
+      <div class="field">
+        <label>Tax year</label>
+        <div class="seg" id="seg-year">
+          <button type="button" data-value="2026" aria-pressed="true">2026</button>
+          <button type="button" data-value="2025" aria-pressed="false">2025</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="state">Where you live</label>
+        <select id="state"></select>
+        <p class="hint">Platforms go by your home state on file, not where buyers are.</p>
+      </div>
+    </div>
+
+    <h3>Selling or getting paid through apps &amp; marketplaces</h3>
+    <p class="small">eBay, Etsy, Depop, Poshmark, StubHub, PayPal, Venmo, Cash App (goods &amp; services), Airbnb, rideshare fares… Enter totals per platform — each platform decides separately.</p>
+    <div class="grid-2">
+      <div class="field">
+        <label for="gross">Gross payments on your biggest platform</label>
+        <div class="input-prefix"><span>$</span><input type="number" id="gross" min="0" step="100" inputmode="decimal" placeholder="3,200"></div>
+        <p class="hint">Gross means before the platform's fees, refunds, or shipping — the form reports the full amount buyers paid.</p>
+      </div>
+      <div class="field">
+        <label for="txns">Number of sales / payments there</label>
+        <input type="number" id="txns" min="0" step="1" inputmode="decimal" placeholder="45">
+      </div>
+    </div>
+    <div class="toggle-row">
+      <input type="checkbox" id="card-payments">
+      <label for="card-payments">I take card payments directly (card reader / merchant account, e.g. Square or Stripe terminal)</label>
+    </div>
+    <div class="toggle-row">
+      <input type="checkbox" id="backup-wh">
+      <label for="backup-wh">The platform withheld tax from my payouts this year (usually a missing or mismatched SSN/EIN)</label>
+    </div>
+    <div class="toggle-row" id="driver-row" hidden>
+      <input type="checkbox" id="app-driver">
+      <label for="app-driver">I drive for an app (rideshare or delivery)</label>
+    </div>
+
+    <h3>Freelance / contractor work paid directly</h3>
+    <div class="field">
+      <label for="client-paid">Most any single client or company paid you this year</label>
+      <div class="input-prefix"><span>$</span><input type="number" id="client-paid" min="0" step="100" inputmode="decimal" placeholder="1,500"></div>
+      <p class="hint">This covers 1099-NEC forms from clients who pay you outside the platforms — by check, bank transfer, or payroll systems.</p>
+    </div>
+
+    <div id="verdict"></div>
+
+    <details>
+      <summary>The one thing everyone gets wrong</summary>
+      <div class="d-body">
+        <p><strong>No form does not mean no tax.</strong> Income from selling and gig work is taxable whether or not any paperwork shows up. The forms only change what the tax agencies already know about — not what you owe. Selling your own used stuff at a loss (most casual closet-clearing) generally creates no tax, even when a 1099-K arrives; you report the form and offset it.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Money from friends and family</summary>
+      <div class="d-body">
+        <p>Personal transfers — splitting rent, paying back dinner, gifts — are not income and should never appear on a 1099-K. Keep personal payments marked as personal (not "goods and services") in the apps and they stay out of the totals.</p>
+      </div>
+    </details>
+    <details>
+      <summary>If you owe, don't wait for April</summary>
+      <div class="d-body">
+        <p>Nobody withholds tax from gig and selling income, so the IRS expects you to pay as you go once you'll owe about $1,000 or more for the year. The 2026 quarterly deadlines are <strong>April 15, June 15, September 15, and January 15 (2027)</strong>. A simple rule that avoids penalties for most people: pay in at least as much as your entire tax was last year (110% of it if you earned over $150,000), spread over the four dates.</p>
+      </div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="foot-logo">ShiftMath</div>
+        <p>Plain-word money math for people who work shifts.</p>
+      </div>
+      <div>
+        <p><a href="methodology.html">How the math works &amp; sources</a><br>
+        <a href="./">Tips &amp; overtime calculator</a> · <a href="w2-codes.html">W-2 code decoder</a> · <a href="employers.html">For employers</a></p>
+      </div>
+    </div>
+    <p class="legal">ShiftMath provides estimates for education, not tax, legal, or financial advice. Reporting rules reflect IRS guidance and state rules as published in September 2026; platforms apply state rules slightly differently, and rules change. Where a state's figure comes from platform practice rather than the state's own published guidance, we say so in the result. Nothing you enter is transmitted or stored.</p>
+  </div>
+</footer>
+
+<script type="module" src="js/app_1099.js"></script>
+</body>
+</html>
