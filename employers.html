@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>W-2 Code TT Calculator — Qualified Overtime Splitter for Payroll | ShiftMath</title>
+<meta name="description" content="Compute the qualified overtime figure for W-2 Box 12 code TT from payroll data. Only the FLSA half-rate premium counts — paste a spreadsheet, get per-employee TT amounts. Runs locally, data never uploaded.">
+<link rel="canonical" href="https://lechemilk33.github.io/autobot/employers.html">
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<link rel="stylesheet" href="css/styles.css">
+<meta property="og:title" content="Qualified overtime splitter for payroll (W-2 code TT)">
+<meta property="og:description" content="Turn payroll rows into per-employee code TT amounts. The premium-only math, done right, in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://lechemilk33.github.io/autobot/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lechemilk33.github.io/autobot/img/og.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="./"><svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="14" fill="#1c6b4a"/><path d="M32 46V22" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round"/><path d="M22 30l10-10 10 10" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="32" cy="52" r="3.2" fill="#daa032"/></svg>ShiftMath</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Calculator</a>
+      <a href="w2-codes.html">W-2 codes</a>
+      <a href="1099.html">1099 checker</a>
+      <a href="employers.html" aria-current="page">For employers</a>
+      <a href="methodology.html">How it works</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="section-label">For employers &amp; bookkeepers · W-2 Box 12 code TT</p>
+    <h1>Get the <span class="accent">code TT</span> number right, for every employee at once.</h1>
+    <p class="lede">Starting with 2026 W-2s, you must report each employee's <strong>qualified overtime compensation</strong> — and it is not their overtime pay. It's only the federally required premium: <em>half</em> the regular rate, for hours past 40 a week. Report the full time-and-a-half by mistake and your employees' deductions (and your W-2c corrections) become your problem in February.</p>
+    <div class="badge-row">
+      <span class="badge green">Free · no signup</span>
+      <span class="badge">Payroll data stays on this device — nothing is uploaded</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Paste or drop your payroll data</h2>
+    <p>Columns needed: <code>employee</code>, <code>regular_rate</code>, <code>ot_hours</code> — plus an optional <code>multiplier</code> if you pay above time-and-a-half. Common header spellings are recognized. One row per employee (use separate rows if someone's rate changed mid-year).</p>
+
+    <div class="file-drop" id="drop-zone">Drop a .csv file here, or paste below</div>
+    <div class="field">
+      <label for="csv-input" class="sr-only">CSV data</label>
+      <textarea id="csv-input" placeholder="employee,regular_rate,ot_hours,multiplier
+Jordan Alvarez,22.50,184,1.5
+Sam Okafor,19.00,92,1.5
+Riley Chen,31.00,210,2"></textarea>
+    </div>
+    <button class="btn" id="run-btn">Split the overtime</button>
+    <button class="btn secondary" id="sample-btn" type="button">Try sample data</button>
+
+    <div id="split-errors"></div>
+    <div id="split-results"></div>
+  </section>
+
+  <section class="card">
+    <h2>The rule, in one example</h2>
+    <p>An employee earns a regular rate of $20/hour and works 10 overtime hours. You pay time-and-a-half: $300 of overtime wages. The amount for code TT is <strong>$100</strong> — the ten "half" premiums of $10 — not $300. If you generously pay double time ($400), code TT is <em>still</em> $100: only the premium federal law requires ever qualifies. This matches the IRS's own worked example in its August 2026 employer FAQ.</p>
+    <div class="callout warn">
+      <strong>What this tool can't check:</strong> whether each employee is actually covered by federal overtime law (salaried-exempt staff aren't), and whether your "regular rate" already includes required extras like nondiscretionary bonuses and shift differentials — under federal rules those raise the regular rate, and therefore the premium. If you pay bonuses to overtime workers, compute the adjusted regular rate first, then use it here. When in doubt, confirm with your payroll provider or accountant.
+    </div>
+    <details>
+      <summary>Why not just let my payroll software do it?</summary>
+      <div class="d-body">
+        <p>The big payroll platforms are adding this — but bookkeepers keep finding systems that report full overtime wages, include non-FLSA overtime (daily or contractual), or haven't turned the field on. This gives you an independent number to check theirs against before W-2s go out. Two minutes now against a stack of W-2c corrections later.</p>
+      </div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="foot-logo">ShiftMath</div>
+        <p>Plain-word money math for people who work shifts.</p>
+      </div>
+      <div>
+        <p><a href="methodology.html">How the math works &amp; sources</a><br>
+        <a href="./">Tips &amp; overtime calculator</a> · <a href="w2-codes.html">W-2 code decoder</a> · <a href="1099.html">1099 checker</a></p>
+      </div>
+    </div>
+    <p class="legal">ShiftMath provides calculations for education, not tax, legal, or accounting advice. The math follows IRS guidance for qualified overtime compensation as of September 2026. Your payroll data is processed entirely in your browser and never transmitted or stored.</p>
+  </div>
+</footer>
+
+<script type="module" src="js/app_employers.js"></script>
+</body>
+</html>

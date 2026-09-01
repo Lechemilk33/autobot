@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShiftMath — Tips &amp; Overtime Tax Deduction Calculator (2025–2026)</title>
+<meta name="description" content="The new federal tax law lets tipped and hourly workers deduct up to $25,000 in tips and $12,500 in overtime premium. See what you'd actually get back — free, private, no signup.">
+<link rel="canonical" href="https://lechemilk33.github.io/autobot/">
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<link rel="stylesheet" href="css/styles.css">
+<meta property="og:title" content="ShiftMath — Tips &amp; Overtime Tax Deduction Calculator">
+<meta property="og:description" content="See what the new tips and overtime tax deductions actually put back in your pocket. Free, private, no signup.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://lechemilk33.github.io/autobot/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lechemilk33.github.io/autobot/img/og.png">
+<meta property="og:url" content="https://lechemilk33.github.io/autobot/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ShiftMath",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Calculator for the federal tips and overtime tax deductions (tax years 2025-2028), the new W-2 codes TT and TP, and 1099 reporting thresholds."
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="./"><svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="14" fill="#1c6b4a"/><path d="M32 46V22" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round"/><path d="M22 30l10-10 10 10" stroke="#f7f4ec" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="32" cy="52" r="3.2" fill="#daa032"/></svg>ShiftMath</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./" aria-current="page">Calculator</a>
+      <a href="w2-codes.html">W-2 codes</a>
+      <a href="1099.html">1099 checker</a>
+      <a href="employers.html">For employers</a>
+      <a href="methodology.html">How it works</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="section-label">Tips &amp; overtime deduction calculator · tax years 2025–2028</p>
+    <h1>Tips and overtime just became <span class="accent">deductible</span>. See what that's worth to you.</h1>
+    <p class="lede">A 2025 federal law lets many tipped and hourly workers deduct up to <strong>$25,000 of tips</strong> and up to <strong>$12,500 of overtime premium</strong> from their taxable income. Most people misjudge what that means for their refund — in both directions. This calculator does the actual math.</p>
+    <div class="badge-row">
+      <span class="badge green">Free · no signup</span>
+      <span class="badge">Runs entirely on your device — nothing you type is sent anywhere</span>
+      <span class="badge gold">Updated for the IRS's August 2026 rules</span>
+    </div>
+  </section>
+
+  <section class="card" id="calculator">
+    <h2>Your estimate</h2>
+
+    <div class="grid-2">
+      <div class="field">
+        <label for="year">Tax year</label>
+        <div class="seg" id="seg-year">
+          <button type="button" data-value="2026" aria-pressed="true">2026</button>
+          <button type="button" data-value="2025" aria-pressed="false">2025</button>
+        </div>
+        <p class="hint">2025 returns are filed in early 2026; 2026 returns in early 2027.</p>
+      </div>
+      <div class="field">
+        <label for="filing">Filing status</label>
+        <div class="seg" id="seg-filing">
+          <button type="button" data-value="single" aria-pressed="true">Single</button>
+          <button type="button" data-value="mfj" aria-pressed="false">Married, joint</button>
+          <button type="button" data-value="hoh" aria-pressed="false">Head of household</button>
+          <button type="button" data-value="mfs" aria-pressed="false">Married, separate</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout bad" id="mfs-warning" hidden>
+      <strong>Married filing separately doesn't qualify.</strong> The law requires married couples to file jointly to claim either deduction. If you can file jointly, run the numbers that way.
+    </div>
+
+    <div class="field">
+      <label for="income">Total income for the year (before taxes)</label>
+      <div class="input-prefix"><span>$</span><input type="number" id="income" min="0" step="500" inputmode="decimal" placeholder="48,000"></div>
+      <p class="hint">Everything on your return: wages including tips and overtime, side income — and your spouse's income if filing jointly. A close guess is fine; this drives your tax bracket and the high-income phase-down.</p>
+    </div>
+
+    <h3>Tips</h3>
+    <div class="field">
+      <label for="occupation">Your job (tips only count in listed occupations)</label>
+      <select id="occupation">
+        <option value="">I don't earn tips</option>
+        <option value="yes-other">My job is on the list / not sure — count my tips</option>
+        <option value="no">My job is NOT on the list</option>
+      </select>
+      <p class="hint">The government published a list of 71 occupations whose tips qualify — servers, bartenders, delivery drivers, barbers, nail techs, rideshare drivers, movers, and more. Pick your category to check.</p>
+    </div>
+    <div class="field" id="tips-amount-field" hidden>
+      <label for="tips">Tips for the year (cash + card, including tip pool)</label>
+      <div class="input-prefix"><span>$</span><input type="number" id="tips" min="0" step="100" inputmode="decimal" placeholder="12,000"></div>
+      <p class="hint">Voluntary tips from customers. Mandatory service charges ("18% added for parties of 6+") don't count. For 2026, use the number your employer reports in W-2 Box 12, code TP.</p>
+    </div>
+    <div class="toggle-row" id="se-row" hidden>
+      <input type="checkbox" id="self-employed">
+      <label for="self-employed">I earn these tips self-employed (booth renter, independent driver, freelancer)</label>
+    </div>
+    <div class="field" id="se-net-field" hidden>
+      <label for="se-net">Net profit from that work this year (before this deduction)</label>
+      <div class="input-prefix"><span>$</span><input type="number" id="se-net" min="0" step="500" inputmode="decimal" placeholder="30,000"></div>
+      <p class="hint">Your tips deduction can't be bigger than what the business actually cleared.</p>
+    </div>
+    <div class="callout warn" id="occupation-no-warning" hidden>
+      <strong>Tips from a job that isn't on the government's list don't qualify.</strong> Your overtime can still count below. The full occupation list is on our <a href="methodology.html#occupations">methodology page</a>.
+    </div>
+
+    <h3>Overtime</h3>
+    <div class="field">
+      <label>Do you work overtime (past 40 hours a week)?</label>
+      <div class="seg" id="seg-ot">
+        <button type="button" data-value="none" aria-pressed="true">No</button>
+        <button type="button" data-value="hours" aria-pressed="false">Yes — estimate it for me</button>
+        <button type="button" data-value="direct" aria-pressed="false">Yes — I know my premium</button>
+      </div>
+    </div>
+    <div id="ot-hours-fields" hidden>
+      <div class="grid-2">
+        <div class="field">
+          <label for="ot-rate">Your regular hourly rate</label>
+          <div class="input-prefix"><span>$</span><input type="number" id="ot-rate" min="0" step="0.5" inputmode="decimal" placeholder="24"></div>
+        </div>
+        <div class="field">
+          <label for="ot-hours-week">Average overtime hours per week</label>
+          <input type="number" id="ot-hours-week" min="0" step="1" inputmode="decimal" placeholder="6">
+        </div>
+      </div>
+      <div class="field">
+        <label for="ot-weeks">Weeks with overtime this year</label>
+        <input type="number" id="ot-weeks" min="0" max="52" step="1" inputmode="decimal" placeholder="40">
+        <p class="hint">Only the extra "half" of time-and-a-half is deductible. At $24/hour you earn $36/hour on overtime — but only $12 of each overtime hour counts. The calculator handles this for you; it's the single most common mistake people make with this law.</p>
+      </div>
+    </div>
+    <div class="field" id="ot-direct-field" hidden>
+      <label for="ot-premium">Qualified overtime premium for the year</label>
+      <div class="input-prefix"><span>$</span><input type="number" id="ot-premium" min="0" step="100" inputmode="decimal" placeholder="3,600"></div>
+      <p class="hint">For 2026 this is the exact number in W-2 Box 12, code TT. For 2025, add up the premium (half-rate) portion from your paystubs.</p>
+    </div>
+    <div class="callout info" id="ot-flsa-note" hidden>
+      <strong>One check first:</strong> only overtime that federal law (the FLSA) requires counts. Most hourly jobs are covered. Overtime that exists only because of a state law, a daily-overtime rule, or your union contract doesn't qualify — and salaried "exempt" workers get nothing from this deduction.
+    </div>
+
+    <div class="result-panel" id="results" hidden>
+      <div class="rp-label">Estimated federal tax savings</div>
+      <div class="rp-big" id="r-savings">$0</div>
+      <p class="rp-sub" id="r-headline"></p>
+      <div class="result-grid">
+        <div class="result-cell"><div class="rc-k">Tips deduction</div><div class="rc-v" id="r-tips">$0</div></div>
+        <div class="result-cell"><div class="rc-k">Overtime deduction</div><div class="rc-v" id="r-ot">$0</div></div>
+        <div class="result-cell"><div class="rc-k">Total deduction</div><div class="rc-v" id="r-combined">$0</div></div>
+        <div class="result-cell"><div class="rc-k">Your top tax rate</div><div class="rc-v" id="r-rate">—</div></div>
+      </div>
+    </div>
+    <div id="result-notes"></div>
+
+    <details>
+      <summary>What this estimate does and doesn't include</summary>
+      <div class="d-body">
+        <p>It computes your two deductions under the 2025 law — the caps, the high-income phase-down, and the exact federal tax brackets for the year you picked, stacked on top of the standard deduction. It assumes the income you entered is all taxed as ordinary income and that you take the standard deduction.</p>
+        <p>It does not know about your credits, itemized deductions, retirement contributions, state taxes, or anything else on your return, and it can't verify that your tips or overtime qualify. <strong>Social Security and Medicare taxes still come out of tips and overtime either way</strong> — this deduction only reduces federal income tax. Treat the result as a good estimate, not a promise, and not tax advice.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Why your paycheck didn't change</summary>
+      <div class="d-body">
+        <p>Employers still withhold income tax from tips and overtime as usual. The deduction shows up when you file your return — typically as a bigger refund. If you'd rather get the money during the year, you can file an updated Form W-4 with your employer and lower your withholding.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Claiming it for 2026: your W-2 is the gatekeeper</summary>
+      <div class="d-body">
+        <p>For tax year 2026, the overtime deduction is limited to the amount your employer reports in <strong>W-2 Box 12, code TT</strong>, and tips flow from <strong>code TP</strong>. If those boxes are missing or wrong, your deduction shrinks with them — so check your W-2 against your own records in January, and talk to payroll early if you're earning qualified overtime now. Our <a href="w2-codes.html">W-2 code decoder</a> explains every box.</p>
+        <p>For tax year 2025 the rules were looser: employers weren't required to report separately, and you may use any reasonable method — like adding the premium portion up from paystubs.</p>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <h2>More free tools</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="w2-codes.html">
+        <div class="tc-emoji">🔍</div>
+        <div class="tc-title">W-2 code decoder</div>
+        <p>Every Box 12 code in plain words — including the three new ones (TP, TT, TA) appearing on W-2s this January.</p>
+      </a>
+      <a class="tool-card" href="1099.html">
+        <div class="tc-emoji">📦</div>
+        <div class="tc-title">Will I get a 1099?</div>
+        <p>Sell online or do gig work? The federal threshold changed again — and 11 states play by different rules.</p>
+      </a>
+      <a class="tool-card" href="employers.html">
+        <div class="tc-emoji">🧾</div>
+        <div class="tc-title">Overtime splitter for payroll</div>
+        <p>Turn payroll rows into the exact "qualified overtime" figure for W-2 code TT. Batch, from a spreadsheet.</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="foot-logo">ShiftMath</div>
+        <p>Plain-word money math for people who work shifts.</p>
+      </div>
+      <div>
+        <p><a href="methodology.html">How the math works &amp; sources</a><br>
+        <a href="w2-codes.html">W-2 code decoder</a> · <a href="1099.html">1099 checker</a> · <a href="employers.html">For employers</a></p>
+      </div>
+    </div>
+    <p class="legal">ShiftMath provides estimates for education, not tax, legal, or financial advice. Figures follow IRS published guidance for tax years 2025 and 2026 as of September 2026; rules can change, and your full tax situation may differ. Confirm anything important with a tax professional or IRS.gov. Calculations run in your browser — the numbers you enter are never transmitted or stored.</p>
+  </div>
+</footer>
+
+<script type="module" src="js/app_calculator.js"></script>
+</body>
+</html>
