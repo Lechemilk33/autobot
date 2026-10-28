@@ -17,6 +17,11 @@ Built with SwiftUI + SwiftData and Apple's Liquid Glass design (iOS 26+), no thi
 | Have sex                | Yes/No |
 | Fight or argue          | Yes/No, short note if yes |
 | Weight                  | lb     |
+| Face photo              | camera |
+| Body photo              | camera |
+
+Photos are taken in the app and kept inside it — they never reach the camera roll, and they
+are downscaled before being saved so 100 days of them stay small.
 
 Not tracked on purpose: food, exact water amount, sleep (already tracked by the Oura ring).
 
@@ -47,8 +52,6 @@ Your data is kept as long as you **don't delete the app**.
 
 ## Later (not built yet)
 
-- Daily photos: a quick face selfie and a body photo, taken in the app with the camera.
-  Stored privately inside the app (SwiftData, same on-phone database as the check-ins), not in the camera roll
 - Sleep pulled in from the Oura ring automatically, no typing — via Apple Health
   (Oura syncs there; reading it may need the paid developer account) or Oura's own API
 - Charts of mood/energy over time

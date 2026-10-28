@@ -115,6 +115,10 @@ struct CheckInForm: View {
                     }
                 }
 
+                GlassCard("Photos") {
+                    PhotoRow(face: $entry.facePhoto, body_: $entry.bodyPhoto)
+                }
+
                 GlassCard("Weight") {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         TextField("0.0", value: $entry.weight, format: .number.precision(.fractionLength(0...1)))

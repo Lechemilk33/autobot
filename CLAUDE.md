@@ -30,6 +30,7 @@ Every answer is optional. **nil = unanswered and never counts as "No"** — this
 - Yes/No: Worked out, Gallon of water, Drank alcohol, Smoked weed, Had sex,
   Fight or argument (a short note field appears when Yes)
 - Weight in lb
+- Two photos: Face (front camera) and Body (rear camera)
 - "Sober" = no alcohol **and** no weed (`isSober` is nil until both are answered)
 
 Not tracked on purpose: food, exact water amount, sleep (the Oura ring already has it).
@@ -43,13 +44,22 @@ Not tracked on purpose: food, exact water amount, sleep (the Oura ring already h
 | `Hundred/CheckInView.swift` | Today tab: the check-in form, "Day N / 100" header, completion ring. |
 | `Hundred/Controls.swift` | 1–10 `RatingRow`, `YesNoRow` (mint when on track, orange when not). Tapping the selected answer clears it back to nil. |
 | `Hundred/ProgressScreen.swift` | Sober streak / totals tiles, 10×10 grid of the 100 days (tap a day to edit it), Day 1 picker. |
+| `Hundred/PhotoRow.swift` | The Photos card: two tappable slots. Long-press a filled slot to retake or remove. |
+| `Hundred/PhotoCapture.swift` | `CameraPicker` (a `UIImagePickerController` wrapper) plus the JPEG downscaling. |
 | `Hundred/Theme.swift` | Animated `MeshGradient` background, `GlassCard`, `IconBadge`. |
 
 **Design rule:** glass is for cards, the ring, tiles and bars only. Controls *inside* a card use
 solid fills (`Color.white.opacity(0.08)`) — no glass on glass.
 
-`DayEntry.questionCount` is 10 and must stay in sync with `answeredCount`, or the completion
-ring never fills.
+`DayEntry.questionCount` is 12 and must stay in sync with `answeredCount`, or the completion
+ring never fills. It counts 3 ratings + 6 yes/no + weight + 2 photos.
+
+**Photos:** stored as `@Attribute(.externalStorage) Data?` on `DayEntry`, downscaled to 1600px
+JPEG at 0.8 quality before saving — full-resolution captures would run to hundreds of MB over
+100 days. They live only in the app's SwiftData store, never the camera roll. The camera needs
+`INFOPLIST_KEY_NSCameraUsageDescription` (set in both build configs). The **simulator has no
+camera**, so `CameraPicker` falls back to the photo library there; that fallback is a
+development convenience, not a feature.
 
 ## How the user wants to work
 
@@ -59,7 +69,6 @@ ring never fills.
 
 ## Later list — don't start these until asked
 
-- Daily face selfie + body photo, taken in the app, stored privately in SwiftData (not the camera roll)
 - Sleep from the Oura ring automatically: Apple Health (HealthKit may need the paid dev account) or Oura's API
 - Charts of mood/energy over time
 - Daily reminder notification (check in + photos)
