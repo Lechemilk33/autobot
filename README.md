@@ -37,9 +37,12 @@ Your data is kept as long as you **don't delete the app**.
 
 ## Later (not built yet)
 
+- Daily photos: a quick face selfie and a body photo, taken in the app with the camera.
+  Stored privately inside the app (SwiftData, same on-phone database as the check-ins), not in the camera roll
 - Sleep pulled in from the Oura ring automatically, no typing — via Apple Health
   (Oura syncs there; reading it may need the paid developer account) or Oura's own API
 - Streaks and totals (sober days, workouts this week)
 - Charts of mood/energy over time
-- A daily reminder notification
+- A daily reminder notification (check in + take photos)
+- Backup/export, since everything lives only on the phone
 - More questions
