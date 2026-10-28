@@ -15,7 +15,7 @@ Built with SwiftUI + SwiftData (iOS 17+), no third-party dependencies.
 | Drink alcohol           | Yes/No |
 | Smoke weed              | Yes/No |
 | Have sex                | Yes/No |
-| Fight or argue          | Yes/No |
+| Fight or argue          | Yes/No, short note if yes |
 | Weight                  | lb     |
 
 Not tracked on purpose: food, exact water amount, sleep (already tracked by the Oura ring).

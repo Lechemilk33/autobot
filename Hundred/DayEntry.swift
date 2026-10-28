@@ -22,6 +22,7 @@ final class DayEntry {
     var smokedWeed: Bool? = nil
     var hadSex: Bool? = nil
     var fought: Bool? = nil
+    var fightNote = ""
 
     init(day: Date) {
         self.day = Calendar.current.startOfDay(for: day)

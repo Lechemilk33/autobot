@@ -79,6 +79,10 @@ struct CheckInForm: View {
                 YesNoPicker(title: "Smoke weed", value: $entry.smokedWeed)
                 YesNoPicker(title: "Have sex", value: $entry.hadSex)
                 YesNoPicker(title: "Fight or argue", value: $entry.fought)
+                if entry.fought == true {
+                    TextField("What happened?", text: $entry.fightNote, axis: .vertical)
+                        .lineLimit(1...3)
+                }
             }
 
             Section("Weight") {

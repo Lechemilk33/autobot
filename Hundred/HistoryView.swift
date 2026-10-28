@@ -48,6 +48,11 @@ struct HistoryRow: View {
             }
             Text("Mood \(rating(entry.mood)) · Energy \(rating(entry.energy)) · Drive \(rating(entry.sexDrive)) · \(weight) lb")
             Text("Workout \(answer(entry.workedOut)) · Water \(answer(entry.drankGallonOfWater)) · Alcohol \(answer(entry.drankAlcohol)) · Weed \(answer(entry.smokedWeed)) · Sex \(answer(entry.hadSex)) · Fight \(answer(entry.fought))")
+            if entry.fought == true, !entry.fightNote.isEmpty {
+                Text("Fight: \(entry.fightNote)")
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
         }
         .font(.subheadline)
     }
