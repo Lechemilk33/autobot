@@ -92,3 +92,56 @@ struct YesNoRow: View {
         .buttonStyle(.plain)
     }
 }
+
+/// A small 0–N counter, for things you have a number of rather than a rating.
+/// Tapping the selected number again clears it back to unanswered.
+struct CountRow: View {
+    let title: String
+    let unit: String
+    let symbol: String
+    let color: Color
+    var range: ClosedRange<Int> = 0...6
+    @Binding var value: Int?
+    @Namespace private var selection
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 12) {
+                IconBadge(symbol: symbol, color: color)
+                Text(title)
+                    .font(.body.weight(.medium))
+                Spacer()
+                Text(value.map { "\($0) \(unit)\($0 == 1 ? "" : "s")" } ?? "–")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(value == nil ? Color.secondary : color)
+                    .contentTransition(.numericText())
+            }
+
+            HStack(spacing: 0) {
+                ForEach(range, id: \.self) { n in
+                    Button {
+                        withAnimation(.snappy) { value = value == n ? nil : n }
+                    } label: {
+                        Text("\(n)")
+                            .font(.callout.weight(value == n ? .bold : .medium))
+                            .foregroundStyle(value == n ? Color.white : Color.secondary)
+                            .frame(maxWidth: .infinity, minHeight: 34)
+                            .background {
+                                if value == n {
+                                    Capsule()
+                                        .fill(color.gradient)
+                                        .matchedGeometryEffect(id: "selection", in: selection)
+                                }
+                            }
+                            .contentShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(title) \(n)")
+                }
+            }
+            .padding(3)
+            .background(Color.white.opacity(0.08), in: .capsule)
+        }
+        .sensoryFeedback(.selection, trigger: value)
+    }
+}

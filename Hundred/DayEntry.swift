@@ -24,6 +24,10 @@ final class DayEntry {
     var fought: Bool? = nil
     var fightNote = ""
 
+    // Caffeine, counted. 0 means "none today"; nil still means unanswered.
+    var coffeeCups: Int? = nil
+    var energyDrinks: Int? = nil
+
     // Taken in the app and kept in this database, never in the camera roll.
     // .externalStorage keeps the JPEG bytes in files beside the store rather
     // than inside its rows, so loading a day's answers stays cheap.
@@ -36,13 +40,14 @@ final class DayEntry {
 }
 
 extension DayEntry {
-    /// Ratings + yes/no questions + weight + the two photos.
-    static let questionCount = 12
+    /// Ratings + yes/no questions + caffeine counts + weight + the two photos.
+    static let questionCount = 14
 
     var answeredCount: Int {
         let ratings = [mood, energy, sexDrive].compactMap { $0 }.count
         let answers = [workedOut, drankGallonOfWater, drankAlcohol, smokedWeed, hadSex, fought].compactMap { $0 }.count
-        return ratings + answers + (weight == nil ? 0 : 1) + photoCount
+        let caffeine = [coffeeCups, energyDrinks].compactMap { $0 }.count
+        return ratings + answers + caffeine + (weight == nil ? 0 : 1) + photoCount
     }
 
     var photoCount: Int { [facePhoto, bodyPhoto].compactMap { $0 }.count }

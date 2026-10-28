@@ -115,6 +115,13 @@ struct CheckInForm: View {
                     }
                 }
 
+                GlassCard("Caffeine") {
+                    CountRow(title: "Coffee", unit: "cup", symbol: "cup.and.saucer.fill",
+                             color: .brown, value: $entry.coffeeCups)
+                    CountRow(title: "Energy drinks", unit: "can", symbol: "bolt.batteryblock.fill",
+                             color: .green, value: $entry.energyDrinks)
+                }
+
                 GlassCard("Photos") {
                     PhotoRow(face: $entry.facePhoto, body_: $entry.bodyPhoto)
                 }

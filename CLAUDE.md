@@ -29,6 +29,9 @@ Every answer is optional. **nil = unanswered and never counts as "No"** — this
 - 1–10: Mood, Energy, Sex drive
 - Yes/No: Worked out, Gallon of water, Drank alcohol, Smoked weed, Had sex,
   Fight or argument (a short note field appears when Yes)
+- Caffeine counts: Coffee (cups) and Energy drinks (cans), 0-6 each.
+  These are the only two caffeine sources worth tracking - don't add more.
+  **0 means "none today" and is a real answer; nil is still unanswered.**
 - Weight in lb
 - Two photos: Face (front camera) and Body (rear camera)
 - "Sober" = no alcohol **and** no weed (`isSober` is nil until both are answered)
@@ -42,7 +45,7 @@ Not tracked on purpose: food, exact water amount, sleep (the Oura ring already h
 | `Hundred/HundredApp.swift` | App entry, `RootView` (Today + Progress tabs), `Challenge` helpers. Day 1 date is a `UserDefaults` double under key `challengeStart`. |
 | `Hundred/DayEntry.swift` | SwiftData model, one per day (`@Attribute(.unique) var day`), plus `answeredCount` / `isSober`. |
 | `Hundred/CheckInView.swift` | Today tab: the check-in form, "Day N / 100" header, completion ring. |
-| `Hundred/Controls.swift` | 1–10 `RatingRow`, `YesNoRow` (mint when on track, orange when not). Tapping the selected answer clears it back to nil. |
+| `Hundred/Controls.swift` | 1–10 `RatingRow`, `YesNoRow` (mint when on track, orange when not), 0–N `CountRow` for the caffeine counts. Tapping the selected answer clears it back to nil. |
 | `Hundred/ProgressScreen.swift` | Sober streak / totals tiles, 10×10 grid of the 100 days (tap a day to edit it), Day 1 picker. |
 | `Hundred/PhotoRow.swift` | The Photos card: two tappable slots. Long-press a filled slot to retake or remove. |
 | `Hundred/PhotoCapture.swift` | `CameraPicker` (a `UIImagePickerController` wrapper) plus the JPEG downscaling. |
@@ -51,8 +54,8 @@ Not tracked on purpose: food, exact water amount, sleep (the Oura ring already h
 **Design rule:** glass is for cards, the ring, tiles and bars only. Controls *inside* a card use
 solid fills (`Color.white.opacity(0.08)`) — no glass on glass.
 
-`DayEntry.questionCount` is 12 and must stay in sync with `answeredCount`, or the completion
-ring never fills. It counts 3 ratings + 6 yes/no + weight + 2 photos.
+`DayEntry.questionCount` is 14 and must stay in sync with `answeredCount`, or the completion
+ring never fills. It counts 3 ratings + 6 yes/no + 2 caffeine + weight + 2 photos.
 
 **Photos:** stored as `@Attribute(.externalStorage) Data?` on `DayEntry`, downscaled to 1600px
 JPEG at 0.8 quality before saving — full-resolution captures would run to hundreds of MB over

@@ -16,6 +16,8 @@ Built with SwiftUI + SwiftData and Apple's Liquid Glass design (iOS 26+), no thi
 | Smoke weed              | Yes/No |
 | Have sex                | Yes/No |
 | Fight or argue          | Yes/No, short note if yes |
+| Coffee                  | cups   |
+| Energy drinks           | cans   |
 | Weight                  | lb     |
 | Face photo              | camera |
 | Body photo              | camera |
