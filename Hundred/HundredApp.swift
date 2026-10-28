@@ -4,7 +4,7 @@ import SwiftData
 @main
 struct HundredApp: App {
     init() {
-        // Day 1 is the first day the app is opened; it can be changed in History.
+        // Day 1 is the first day the app is opened; it can be changed on the Progress tab.
         if UserDefaults.standard.object(forKey: Challenge.startKey) == nil {
             UserDefaults.standard.set(Calendar.current.startOfDay(for: .now).timeIntervalSince1970,
                                       forKey: Challenge.startKey)
@@ -13,14 +13,26 @@ struct HundredApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TabView {
-                TodayView()
-                    .tabItem { Label("Today", systemImage: "checkmark.circle") }
-                HistoryView()
-                    .tabItem { Label("History", systemImage: "calendar") }
-            }
+            RootView()
         }
         .modelContainer(for: DayEntry.self)
+    }
+}
+
+struct RootView: View {
+    var body: some View {
+        TabView {
+            Tab("Today", systemImage: "checkmark.circle.fill") {
+                TodayView()
+            }
+            Tab("Progress", systemImage: "circle.grid.3x3.fill") {
+                ProgressScreen()
+            }
+        }
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .tint(.mint)
+        .fontDesign(.rounded)
+        .preferredColorScheme(.dark)
     }
 }
 
@@ -35,9 +47,9 @@ enum Challenge {
         let to = calendar.startOfDay(for: date)
         return (calendar.dateComponents([.day], from: from, to: to).day ?? 0) + 1
     }
+}
 
-    static func title(for date: Date, start: Double) -> String {
-        let day = dayNumber(of: date, start: start)
-        return day >= 1 ? "Day \(day) of \(length)" : "Before Day 1"
-    }
+#Preview {
+    RootView()
+        .modelContainer(for: DayEntry.self, inMemory: true)
 }

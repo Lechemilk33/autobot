@@ -28,3 +28,21 @@ final class DayEntry {
         self.day = Calendar.current.startOfDay(for: day)
     }
 }
+
+extension DayEntry {
+    /// Ratings + yes/no questions + weight.
+    static let questionCount = 10
+
+    var answeredCount: Int {
+        let ratings = [mood, energy, sexDrive].compactMap { $0 }.count
+        let answers = [workedOut, drankGallonOfWater, drankAlcohol, smokedWeed, hadSex, fought].compactMap { $0 }.count
+        return ratings + answers + (weight == nil ? 0 : 1)
+    }
+
+    /// True with no alcohol and no weed, false if either was a yes, nil until both are answered.
+    var isSober: Bool? {
+        if drankAlcohol == true || smokedWeed == true { return false }
+        if drankAlcohol == false && smokedWeed == false { return true }
+        return nil
+    }
+}
