@@ -3,15 +3,29 @@
 #
 #   ./install-to-phone.sh
 #
+# Works over Wi-Fi once the phone has been paired; it does not need to be plugged in.
+#
 # Prerequisites, once each:
-#   1. iPhone plugged in and unlocked, "Trust This Computer" tapped.
+#   1. iPhone paired: plug it in, unlock, tap "Trust This Computer" (after that, Wi-Fi is fine).
 #   2. iPhone: Settings > Privacy & Security > Developer Mode > On (reboots the phone).
-#   3. Xcode > Settings > Accounts > + > Apple ID > sign in (needed so Xcode can
-#      create the free provisioning profile; the keychain certificate alone is not enough).
+#   3. A provisioning profile for this bundle ID. Xcode creates one the first time you
+#      run the app on the device, and renews it when it expires (free profiles last 7 days).
+#      If signing fails with "No profiles ... were found", open the project in Xcode,
+#      pick the phone as the destination and press Run once; then this script works again.
 set -euo pipefail
 cd "$(dirname "$0")"
 
-TEAM="${TEAM:-G6H5P3DS85}"          # Personal Team for ryansilvas33@gmail.com
+# The team is the OU of the signing certificate, NOT the id in its common name:
+# "Apple Development: you@example.com (G6H5P3DS85)" has OU=2VZDDH4DF6, and the team
+# is the OU. Resolve it from the certificate rather than hardcoding the wrong one.
+TEAM="${TEAM:-$(security find-certificate -a -c "Apple Development" -p 2>/dev/null \
+  | openssl x509 -noout -subject 2>/dev/null \
+  | sed -n 's/.*OU=\([A-Z0-9]*\).*/\1/p' | head -1)}"
+if [ -z "${TEAM:-}" ]; then
+  echo "No 'Apple Development' certificate found in the keychain." >&2
+  echo "Open Xcode, sign in under Settings > Accounts, and run the app on the phone once." >&2
+  exit 1
+fi
 BUNDLE="${BUNDLE:-com.lechemilk33.hundred}"
 
 echo "==> Looking for a connected iPhone"
@@ -43,11 +57,12 @@ if [ -z "${UDID:-}" ]; then
 fi
 echo "    $DEVNAME ($UDID)"
 
-echo "==> Building and signing"
+echo "==> Building and signing (team $TEAM)"
 xcodebuild -project Hundred.xcodeproj -scheme Hundred -configuration Debug \
   -destination "platform=iOS,id=$UDID" \
   -derivedDataPath build/device \
   -allowProvisioningUpdates \
+  CODE_SIGN_STYLE=Automatic \
   DEVELOPMENT_TEAM="$TEAM" \
   PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE" \
   build
