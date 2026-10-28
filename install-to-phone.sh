@@ -15,13 +15,33 @@ TEAM="${TEAM:-G6H5P3DS85}"          # Personal Team for ryansilvas33@gmail.com
 BUNDLE="${BUNDLE:-com.lechemilk33.hundred}"
 
 echo "==> Looking for a connected iPhone"
-UDID=$(xcrun devicectl list devices 2>/dev/null \
-  | awk '/available/ && /iPhone/ {print $(NF-1); exit}')
+TMP=$(mktemp -t hundreddev)
+xcrun devicectl list devices --json-output "$TMP" >/dev/null 2>&1 || true
+read -r UDID DEVNAME <<<"$(python3 - "$TMP" <<'PYEOF'
+import json, sys
+try:
+    devs = json.load(open(sys.argv[1]))["result"]["devices"]
+except Exception:
+    sys.exit(0)
+for d in devs:
+    hw = d.get("hardwareProperties", {})
+    conn = d.get("connectionProperties", {})
+    if hw.get("platform") != "iOS":
+        continue
+    if conn.get("pairingState") != "paired":
+        continue
+    print(hw.get("udid", ""), d.get("deviceProperties", {}).get("name", "iPhone"))
+    break
+PYEOF
+)"
+rm -f "$TMP"
 if [ -z "${UDID:-}" ]; then
-  echo "No iPhone found. Plug it in, unlock it, and tap Trust This Computer." >&2
+  echo "No paired iPhone found." >&2
+  echo "Plug it in, unlock it, tap Trust This Computer, then run:" >&2
+  echo "  xcrun devicectl list devices" >&2
   exit 1
 fi
-echo "    device $UDID"
+echo "    $DEVNAME ($UDID)"
 
 echo "==> Building and signing"
 xcodebuild -project Hundred.xcodeproj -scheme Hundred -configuration Debug \
