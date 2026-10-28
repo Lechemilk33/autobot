@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://lechemilk33.github.io/autobot/sitemap.xml
