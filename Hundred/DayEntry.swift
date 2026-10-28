@@ -8,14 +8,20 @@ final class DayEntry {
     @Attribute(.unique) var day: Date
 
     // 1–10
-    var mentalHealth: Int? = nil
+    var mood: Int? = nil
     var energy: Int? = nil
+    var sexDrive: Int? = nil
+
+    // Pounds
+    var weight: Double? = nil
 
     // Yes / no
     var workedOut: Bool? = nil
-    var drank: Bool? = nil
+    var drankGallonOfWater: Bool? = nil
+    var drankAlcohol: Bool? = nil
     var smokedWeed: Bool? = nil
     var hadSex: Bool? = nil
+    var fought: Bool? = nil
 
     init(day: Date) {
         self.day = Calendar.current.startOfDay(for: day)

@@ -60,21 +60,42 @@ struct CheckInView: View {
 
 struct CheckInForm: View {
     @Bindable var entry: DayEntry
+    @FocusState private var weightFocused: Bool
 
     var body: some View {
         Form {
             Section {
-                RatingPicker(title: "Mental health", value: $entry.mentalHealth)
+                RatingPicker(title: "Mood", value: $entry.mood)
                 RatingPicker(title: "Energy", value: $entry.energy)
+                RatingPicker(title: "Sex drive", value: $entry.sexDrive)
             } header: {
                 Text(entry.day, format: .dateTime.weekday(.wide).month().day())
             }
 
             Section("Did I…") {
                 YesNoPicker(title: "Work out", value: $entry.workedOut)
-                YesNoPicker(title: "Drink", value: $entry.drank)
+                YesNoPicker(title: "Drink a gallon of water", value: $entry.drankGallonOfWater)
+                YesNoPicker(title: "Drink alcohol", value: $entry.drankAlcohol)
                 YesNoPicker(title: "Smoke weed", value: $entry.smokedWeed)
                 YesNoPicker(title: "Have sex", value: $entry.hadSex)
+                YesNoPicker(title: "Fight or argue", value: $entry.fought)
+            }
+
+            Section("Weight") {
+                HStack {
+                    TextField("Weight", value: $entry.weight, format: .number.precision(.fractionLength(0...1)))
+                        .keyboardType(.decimalPad)
+                        .focused($weightFocused)
+                    Text("lb").foregroundStyle(.secondary)
+                }
+            }
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .toolbar {
+            // The decimal pad has no return key, so give it a way to close.
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { weightFocused = false }
             }
         }
     }

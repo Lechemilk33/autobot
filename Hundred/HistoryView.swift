@@ -46,10 +46,14 @@ struct HistoryRow: View {
                 Text(entry.day, format: .dateTime.month().day())
                     .foregroundStyle(.secondary)
             }
-            Text("Mental \(rating(entry.mentalHealth)) · Energy \(rating(entry.energy))")
-            Text("Workout \(answer(entry.workedOut)) · Drink \(answer(entry.drank)) · Weed \(answer(entry.smokedWeed)) · Sex \(answer(entry.hadSex))")
+            Text("Mood \(rating(entry.mood)) · Energy \(rating(entry.energy)) · Drive \(rating(entry.sexDrive)) · \(weight) lb")
+            Text("Workout \(answer(entry.workedOut)) · Water \(answer(entry.drankGallonOfWater)) · Alcohol \(answer(entry.drankAlcohol)) · Weed \(answer(entry.smokedWeed)) · Sex \(answer(entry.hadSex)) · Fight \(answer(entry.fought))")
         }
         .font(.subheadline)
+    }
+
+    private var weight: String {
+        entry.weight?.formatted(.number.precision(.fractionLength(0...1))) ?? "–"
     }
 
     private func rating(_ value: Int?) -> String {
