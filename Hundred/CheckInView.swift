@@ -94,6 +94,10 @@ struct CheckInForm: View {
                 }
 
                 GlassCard("Checklist") {
+                    DailySetsRow(pushups: $entry.pushups,
+                                 situps: $entry.situps,
+                                 legLifts: $entry.legLifts)
+
                     YesNoRow(title: "Worked out", symbol: "figure.run", color: .red,
                              goal: true, value: $entry.workedOut)
                     if entry.workedOut == true {

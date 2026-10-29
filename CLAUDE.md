@@ -27,6 +27,10 @@ Every answer is optional. **nil = unanswered and never counts as "No"** — this
 `answeredCount`, `isSober`, and the grid colors; don't collapse optionals to `false`.
 
 - 1–10: Mood, Energy, Sex drive
+- Daily sets, as **one** checklist item: 50 pushups, 50 situps, 25 leg lifts. The single
+  check has no Yes/No and can't be tapped — it fills in only once all three are ticked, so
+  the item can never be marked done while part of the work is still owed. It counts as one
+  question in the ring, and only once all three are done.
 - Yes/No: Worked out, Gallon of water, Drank alcohol, Smoked weed, Had sex,
   Fight or argument (a short note field appears when Yes)
 - Workout score 1-10 ("How was it"), shown only when Worked out is Yes. Answering No or
@@ -68,7 +72,7 @@ dinner because it takes longer. One 1 lb beef pack covers two lunches.
 | `Hundred/DayEntry.swift` | SwiftData model, one per day (`@Attribute(.unique) var day`), plus `answeredCount` / `isSober`. |
 | `Hundred/CheckInView.swift` | Today tab: the check-in form, "Day N / 100" header, completion ring. |
 | `Hundred/Controls.swift` | 1–10 `RatingRow`, `YesNoRow` (mint when on track, orange when not), 0–N `CountRow` for the caffeine counts. Tapping the selected answer clears it back to nil. |
-| `Hundred/ProgressScreen.swift` | Sober streak / totals tiles, 10×10 grid of the 100 days (tap a day to edit it), Day 1 picker. |
+| `Hundred/ProgressScreen.swift` | `StartDateCard` (Day 1 picker + "Make today Day 1"), sober streak / totals tiles, 10×10 grid of the 100 days (tap a day to edit it). |
 | `Hundred/PhotoRow.swift` | The Photos card: two tappable slots. Long-press a filled slot to retake or remove. |
 | `Hundred/PhotoCapture.swift` | `CameraPicker` (a `UIImagePickerController` wrapper) plus the JPEG downscaling. |
 | `Hundred/MealPlan.swift` | The fixed menu, its macros, and the weekly grocery list. Edit meals here and everything else follows. |
@@ -83,8 +87,14 @@ solid fills (`Color.white.opacity(0.08)`) — no glass on glass.
 
 `DayEntry.questionCount` must stay in sync with `answeredCount`, or the completion ring never
 fills. It is **per entry, not a constant**: 14 normally (3 ratings + 6 yes/no + 2 caffeine +
-weight + 2 photos), and 15 on a day you worked out, when the workout score joins them. That
+weight + 2 photos + the daily sets), and 16 on a day you worked out, when the workout score joins
+them. That
 way the ring still reaches full on a rest day.
+
+**The Day 1 card stays at the top of the Progress tab.** It used to sit below the 100-day
+grid, which is taller than the screen, so in practice nobody could reach it — the user
+couldn't work out how to make today Day 1. The "Make today Day 1" button is there so
+setting the start needs one tap instead of a calendar. Don't move it back down.
 
 **Before Day 1** the header reads "Starts tomorrow" / "Starts in N days" instead of a day
 number, and the day stays editable so it can be used for a trial run. `Challenge.dayNumber`

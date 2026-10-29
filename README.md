@@ -10,6 +10,7 @@ Built with SwiftUI + SwiftData and Apple's Liquid Glass design (iOS 26+), no thi
 | Mood                    | 1–10   |
 | Energy                  | 1–10   |
 | Sex drive               | 1–10   |
+| 50 pushups, 50 situps, 25 leg lifts | one check, and only once all three are done |
 | Work out                | Yes/No |
 | How was the workout     | 1–10, only if you worked out |
 | Drink a gallon of water | Yes/No |

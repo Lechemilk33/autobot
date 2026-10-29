@@ -145,3 +145,78 @@ struct CountRow: View {
         .sensoryFeedback(.selection, trigger: value)
     }
 }
+
+/// The daily minimum as a single checklist item: 50 pushups, 50 situps, 25 leg lifts.
+/// The one check can't be tapped — it fills itself in only once all three are done,
+/// so the item can never be marked off while part of the work is still owed.
+struct DailySetsRow: View {
+    @Binding var pushups: Bool?
+    @Binding var situps: Bool?
+    @Binding var legLifts: Bool?
+
+    private var done: Bool { pushups == true && situps == true && legLifts == true }
+    private var count: Int { [pushups, situps, legLifts].filter { $0 == true }.count }
+
+    var body: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                IconBadge(symbol: "figure.cooldown", color: .orange)
+                Text("Daily sets")
+                    .font(.body.weight(.medium))
+                Spacer(minLength: 8)
+                if done {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 28))
+                        .foregroundStyle(.mint)
+                        .transition(.scale.combined(with: .opacity))
+                } else {
+                    // Shows the gate rather than an empty circle, so it reads as
+                    // "still owed", not "forgot to answer".
+                    Text("\(count) of 3")
+                        .font(.subheadline.weight(.semibold))
+                        .monospacedDigit()
+                        .foregroundStyle(.secondary)
+                        .contentTransition(.numericText())
+                }
+            }
+
+            VStack(spacing: 10) {
+                SetToggle(title: "50 pushups", value: $pushups)
+                SetToggle(title: "50 situps", value: $situps)
+                SetToggle(title: "25 leg lifts", value: $legLifts)
+            }
+            .padding(.leading, 46)
+        }
+        .animation(.snappy, value: count)
+        .sensoryFeedback(.success, trigger: done) { _, isDone in isDone }
+    }
+}
+
+/// One of the three sets. Tapping a done set clears it again, like every other answer.
+private struct SetToggle: View {
+    let title: String
+    @Binding var value: Bool?
+
+    var body: some View {
+        let on = value == true
+        Button {
+            withAnimation(.snappy) { value = on ? nil : true }
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: on ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(on ? Color.mint : Color.secondary)
+                    .contentTransition(.symbolEffect(.replace))
+                Text(title)
+                    .strikethrough(on)
+                    .foregroundStyle(on ? Color.secondary : Color.primary)
+                Spacer(minLength: 0)
+            }
+            .font(.subheadline.weight(.medium))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .sensoryFeedback(.selection, trigger: value)
+        .accessibilityAddTraits(on ? .isSelected : [])
+    }
+}

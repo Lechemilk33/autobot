@@ -26,6 +26,12 @@ final class DayEntry {
     var fought: Bool? = nil
     var fightNote = ""
 
+    // The daily minimum: 50 pushups, 50 situps, 25 leg lifts. One checklist item
+    // made of three parts, so it can't be ticked off until all three are done.
+    var pushups: Bool? = nil
+    var situps: Bool? = nil
+    var legLifts: Bool? = nil
+
     // Caffeine, counted. 0 means "none today"; nil still means unanswered.
     var coffeeCups: Int? = nil
     var energyDrinks: Int? = nil
@@ -42,20 +48,25 @@ final class DayEntry {
 }
 
 extension DayEntry {
-    /// 3 ratings + 6 yes/no + 2 caffeine counts + weight + 2 photos, and on a day
-    /// you worked out, the workout score as well. It varies per day, so the ring
-    /// can still reach full on a rest day.
-    var questionCount: Int { 14 + (workedOut == true ? 1 : 0) }
+    /// 3 ratings + 6 yes/no + the daily sets + 2 caffeine counts + weight + 2 photos,
+    /// and on a day you worked out, the workout score as well. It varies per day, so
+    /// the ring can still reach full on a rest day.
+    var questionCount: Int { 15 + (workedOut == true ? 1 : 0) }
 
     var answeredCount: Int {
         let ratings = [mood, energy, sexDrive].compactMap { $0 }.count
         let answers = [workedOut, drankGallonOfWater, drankAlcohol, smokedWeed, hadSex, fought].compactMap { $0 }.count
         let caffeine = [coffeeCups, energyDrinks].compactMap { $0 }.count
         let score = (workedOut == true && workoutScore != nil) ? 1 : 0
-        return ratings + answers + caffeine + score + (weight == nil ? 0 : 1) + photoCount
+        let sets = didDailySets ? 1 : 0
+        return ratings + answers + caffeine + score + sets + (weight == nil ? 0 : 1) + photoCount
     }
 
     var photoCount: Int { [facePhoto, bodyPhoto].compactMap { $0 }.count }
+
+    /// The daily sets only count once all three are done — that's the whole point
+    /// of them being one item, so there is no way to tick it off part-finished.
+    var didDailySets: Bool { pushups == true && situps == true && legLifts == true }
 
     /// True with no alcohol and no weed, false if either was a yes, nil until both are answered.
     var isSober: Bool? {

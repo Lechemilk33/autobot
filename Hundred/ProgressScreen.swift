@@ -20,6 +20,8 @@ struct ProgressScreen: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    StartDateCard(start: startDate)
+
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)],
                               spacing: 12) {
                         StatTile(value: Self.soberStreak(byDay), label: "Sober streak",
@@ -40,12 +42,6 @@ struct ProgressScreen: View {
                             LegendDot(color: Color.white.opacity(0.25), label: "Not logged")
                         }
                     }
-
-                    DatePicker("Day 1", selection: startDate, displayedComponents: .date)
-                        .font(.body.weight(.medium))
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 14)
-                        .glassEffect(.regular, in: .rect(cornerRadius: 24))
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
@@ -73,6 +69,36 @@ struct ProgressScreen: View {
             day = previous
         }
         return streak
+    }
+}
+
+/// Which day the challenge starts from. It sits at the top of the tab because the
+/// 100-day grid is taller than the screen, and below that this was unreachable.
+struct StartDateCard: View {
+    @Binding var start: Date
+
+    private var isToday: Bool { Calendar.current.isDateInToday(start) }
+
+    var body: some View {
+        GlassCard("Day 1") {
+            DatePicker("Starts on", selection: $start, displayedComponents: .date)
+                .font(.body.weight(.medium))
+
+            Button {
+                withAnimation(.snappy) { start = Calendar.current.startOfDay(for: .now) }
+            } label: {
+                Text(isToday ? "Today is Day 1" : "Make today Day 1")
+                    .font(.body.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(isToday ? Color.white.opacity(0.08) : Color.mint.opacity(0.22),
+                                in: .rect(cornerRadius: 16))
+                    .foregroundStyle(isToday ? Color.secondary : Color.mint)
+            }
+            .buttonStyle(.plain)
+            .disabled(isToday)
+            .sensoryFeedback(.success, trigger: isToday) { _, now in now }
+        }
     }
 }
 
