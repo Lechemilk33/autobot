@@ -26,7 +26,8 @@ Built with SwiftUI + SwiftData and Apple's Liquid Glass design (iOS 26+), no thi
 Photos are taken in the app and kept inside it — they never reach the camera roll, and they
 are downscaled before being saved so 100 days of them stay small.
 
-Not tracked on purpose: food, exact water amount, sleep (already tracked by the Oura ring).
+Not tracked on purpose: exact water amount, sleep (already tracked by the Oura ring).
+Food isn't *logged* either — the meal plan below is fixed, so meals get checked off, not written down.
 
 Unanswered questions stay blank (–) instead of counting as "No".
 **Today** is the check-in, with a calendar button for filling in a missed day.
@@ -34,7 +35,7 @@ Unanswered questions stay blank (–) instead of counting as "No".
 
 ## Meal plan
 
-The same five meals every day (≈ 2,764 kcal, ≈ 194 g protein), defined in `Hundred/MealPlan.swift`.
+The same five meals every day (≈ 2,757 kcal, ≈ 193 g protein), defined in `Hundred/MealPlan.swift`.
 
 - **Meals** lists each meal with exactly what's in it and a checkmark to tap once it's eaten, with protein and calories so far.
   Optional notifications, one per meal: press and hold one and tap **Ate it** to check the meal off without opening the app.

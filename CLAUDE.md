@@ -38,19 +38,44 @@ Every answer is optional. **nil = unanswered and never counts as "No"** — this
 - Two photos: Face (front camera) and Body (rear camera)
 - "Sober" = no alcohol **and** no weed (`isSober` is nil until both are answered)
 
-Not tracked on purpose: food, exact water amount, sleep (the Oura ring already has it).
+Not tracked on purpose: exact water amount, sleep (the Oura ring already has it).
+Food is **planned, not logged** — see below. There is still no logging of what was eaten,
+no calorie counting and no portion entry; a meal is one checkmark against a fixed menu.
+
+## Meals and groceries
+
+The same five meals every day, so there is nothing to choose, weigh or calculate:
+coffee + eggs, beef + rice, a smoothie, chicken + rice, milk + granola
+(~2,757 kcal, ~193 g protein). Ground beef is lunch because it cooks fast; chicken is
+dinner because it takes longer. One 1 lb beef pack covers two lunches.
+
+- **The plan is fixed.** `MealPlan.swift` is the single source for the menu, the macros and
+  the grocery list. Change a meal there and the Meals tab, the totals and the shopping list
+  all follow. Don't add meal choices, swaps or a food database.
+- **No spinach** — the user doesn't eat it. Removed from the smoothie and the grocery list.
+- `MealLog` mirrors `DayEntry`: one row per day, `true` means eaten, nil means unchecked.
+- **Reminders are opt-in**, one per meal, off until the Reminders sheet is toggled on.
+  "Ate it" on the notification checks the meal off without opening the app, which is why
+  `HundredApp.container` is a static the notification handler can reach.
+- Grocery checkmarks are a comma-joined id list in `UserDefaults`, not SwiftData —
+  the list is a weekly scratch pad, not history worth keeping.
 
 ## Files
 
 | File | What's in it |
 |---|---|
-| `Hundred/HundredApp.swift` | App entry, `RootView` (Today + Progress tabs), `Challenge` helpers. Day 1 date is a `UserDefaults` double under key `challengeStart`. |
+| `Hundred/HundredApp.swift` | App entry, `RootView` (Today, Meals, Groceries, Progress tabs), `Challenge` helpers. Day 1 date is a `UserDefaults` double under key `challengeStart`. Holds the shared `ModelContainer` (`DayEntry` + `MealLog`) as a static so the notification handler can write without the app being open. |
 | `Hundred/DayEntry.swift` | SwiftData model, one per day (`@Attribute(.unique) var day`), plus `answeredCount` / `isSober`. |
 | `Hundred/CheckInView.swift` | Today tab: the check-in form, "Day N / 100" header, completion ring. |
 | `Hundred/Controls.swift` | 1–10 `RatingRow`, `YesNoRow` (mint when on track, orange when not), 0–N `CountRow` for the caffeine counts. Tapping the selected answer clears it back to nil. |
 | `Hundred/ProgressScreen.swift` | Sober streak / totals tiles, 10×10 grid of the 100 days (tap a day to edit it), Day 1 picker. |
 | `Hundred/PhotoRow.swift` | The Photos card: two tappable slots. Long-press a filled slot to retake or remove. |
 | `Hundred/PhotoCapture.swift` | `CameraPicker` (a `UIImagePickerController` wrapper) plus the JPEG downscaling. |
+| `Hundred/MealPlan.swift` | The fixed menu, its macros, and the weekly grocery list. Edit meals here and everything else follows. |
+| `Hundred/MealLog.swift` | SwiftData model, one per day: which meals were checked off. |
+| `Hundred/MealsView.swift` | Meals tab: the five meals, protein/calories so far, and the Reminders sheet. |
+| `Hundred/GroceriesView.swift` | Groceries tab: one week of the plan as a store checklist. |
+| `Hundred/MealReminders.swift` | Scheduling the per-meal notifications and handling "Ate it". |
 | `Hundred/Theme.swift` | Animated `MeshGradient` background, `GlassCard`, `IconBadge`. |
 
 **Design rule:** glass is for cards, the ring, tiles and bars only. Controls *inside* a card use
@@ -74,7 +99,9 @@ development convenience, not a feature.
 
 ## How the user wants to work
 
-- Keep it a quick checklist, under a minute a day. No food logging. Don't overbuild.
+- Keep it a quick checklist, under a minute a day. Don't overbuild.
+- No food *logging*. The meal plan is a fixed menu you tick off, which is why it fits
+  that rule — don't turn it into calorie tracking or a food diary.
 - **Ask before adding new questions or features.**
 - They know their way around code; keep explanations short.
 
