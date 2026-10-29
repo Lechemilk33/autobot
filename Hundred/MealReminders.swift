@@ -1,18 +1,16 @@
 import Foundation
 import UserNotifications
 
-/// One daily notification per meal. Long-pressing it offers "Ate it" and
-/// "Skipped", which log the answer without opening the app.
+/// One daily notification per meal. Long-pressing it offers "Ate it", which
+/// checks the meal off without opening the app.
 enum MealReminders {
     static let enabledKey = "mealRemindersOn"
     static let categoryID = "MEAL"
     static let ateAction = "ATE"
-    static let skippedAction = "SKIPPED"
 
     static func registerActions() {
         let ate = UNNotificationAction(identifier: ateAction, title: "Ate it", options: [])
-        let skipped = UNNotificationAction(identifier: skippedAction, title: "Skipped", options: [])
-        let category = UNNotificationCategory(identifier: categoryID, actions: [ate, skipped],
+        let category = UNNotificationCategory(identifier: categoryID, actions: [ate],
                                               intentIdentifiers: [], options: [])
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
@@ -61,8 +59,8 @@ enum MealReminders {
     private static func timeKey(_ meal: Meal) -> String { "mealTime." + meal.rawValue }
 }
 
-/// Shows meal reminders while the app is open, and saves "Ate it" / "Skipped"
-/// straight from the notification.
+/// Shows meal reminders while the app is open, and checks a meal off when
+/// "Ate it" is tapped on its notification.
 final class MealNotificationHandler: NSObject, UNUserNotificationCenterDelegate {
     static let shared = MealNotificationHandler()
 
@@ -73,15 +71,8 @@ final class MealNotificationHandler: NSObject, UNUserNotificationCenterDelegate 
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-        let ate: Bool
-        switch response.actionIdentifier {
-        case MealReminders.ateAction: ate = true
-        case MealReminders.skippedAction: ate = false
-        default:
-            completionHandler()
-            return
-        }
-        guard let raw = response.notification.request.content.userInfo["meal"] as? String,
+        guard response.actionIdentifier == MealReminders.ateAction,
+              let raw = response.notification.request.content.userInfo["meal"] as? String,
               let meal = Meal(rawValue: raw) else {
             completionHandler()
             return
@@ -91,7 +82,7 @@ final class MealNotificationHandler: NSObject, UNUserNotificationCenterDelegate 
         Task { @MainActor in
             let context = HundredApp.container.mainContext
             let log = MealLog.forDay(day, in: context)
-            log[meal] = ate
+            log[meal] = true
             try? context.save()
             completionHandler()
         }

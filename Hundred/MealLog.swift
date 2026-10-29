@@ -1,8 +1,8 @@
 import Foundation
 import SwiftData
 
-/// Whether each planned meal was eaten, one log per calendar day.
-/// nil means not answered yet, so a forgotten meal never counts as skipped.
+/// Which planned meals were checked off, one log per calendar day.
+/// true means eaten; nil means not checked.
 @Model
 final class MealLog {
     @Attribute(.unique) var day: Date

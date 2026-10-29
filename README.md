@@ -28,8 +28,8 @@ Unanswered questions stay blank (–) instead of counting as "No".
 
 The same five meals every day (≈ 2,764 kcal, ≈ 194 g protein), defined in `Hundred/MealPlan.swift`.
 
-- **Meals** lists each meal with exactly what's in it and a Yes / No for "Did you eat it?", with protein and calories eaten so far.
-  Optional reminders, one per meal: press and hold a notification to log **Ate it** or **Skipped** without opening the app.
+- **Meals** lists each meal with exactly what's in it and a checkmark to tap once it's eaten, with protein and calories so far.
+  Optional notifications, one per meal: press and hold one and tap **Ate it** to check the meal off without opening the app.
 - **Groceries** is one week of the plan as a checklist, split into "every week" and "restock when low".
 - Every day is identical: ground beef at lunch (one 1 lb pack covers two lunches), chicken at dinner.
 

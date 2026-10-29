@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-/// The Meals tab: the day's five meals, each with a "Did you eat it?" answer.
+/// The Meals tab: the day's five meals, each checked off once it's eaten.
 struct MealsView: View {
     @State private var day = Date.now
     @State private var showingCalendar = false
@@ -71,7 +71,6 @@ struct MealDayView: View {
 
 struct MealDayForm: View {
     @Bindable var log: MealLog
-    @AppStorage(MealReminders.enabledKey) private var remindersOn = false
 
     var body: some View {
         let meals = MealPlan.meals
@@ -86,7 +85,7 @@ struct MealDayForm: View {
                     .padding(.horizontal, 4)
 
                 ForEach(meals) { planned in
-                    MealCard(planned: planned, showsTime: remindersOn, answer: answer(for: planned.meal))
+                    MealCard(planned: planned, ate: ate(planned.meal))
                 }
             }
             .padding(.horizontal, 16)
@@ -94,8 +93,8 @@ struct MealDayForm: View {
         }
     }
 
-    private func answer(for meal: Meal) -> Binding<Bool?> {
-        Binding(get: { log[meal] }, set: { log[meal] = $0 })
+    private func ate(_ meal: Meal) -> Binding<Bool> {
+        Binding(get: { log[meal] == true }, set: { log[meal] = $0 ? true : nil })
     }
 }
 
@@ -137,20 +136,31 @@ struct MealsHeader: View {
     }
 }
 
+/// One meal. Tap its top row to check it off, or again to uncheck it.
 struct MealCard: View {
     let planned: PlannedMeal
-    let showsTime: Bool
-    @Binding var answer: Bool?
-
-    private var title: String {
-        guard showsTime else { return planned.when }
-        let time = MealReminders.time(for: planned.meal).formatted(date: .omitted, time: .shortened)
-        return "\(planned.when) · \(time)"
-    }
+    @Binding var ate: Bool
 
     var body: some View {
-        GlassCard(title) {
-            YesNoRow(title: planned.name, symbol: planned.symbol, color: planned.color, goal: true, value: $answer)
+        GlassCard(planned.when) {
+            Button {
+                withAnimation(.snappy) { ate.toggle() }
+            } label: {
+                HStack(spacing: 12) {
+                    IconBadge(symbol: planned.symbol, color: planned.color)
+                    Text(planned.name)
+                        .font(.body.weight(.medium))
+                    Spacer(minLength: 8)
+                    Image(systemName: ate ? "checkmark.circle.fill" : "circle")
+                        .font(.system(size: 30))
+                        .foregroundStyle(ate ? Color.mint : Color.secondary)
+                        .contentTransition(.symbolEffect(.replace))
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .sensoryFeedback(.selection, trigger: ate)
+            .accessibilityAddTraits(ate ? .isSelected : [])
 
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(planned.items, id: \.self) { item in
@@ -186,7 +196,7 @@ struct RemindersSheet: View {
                 } footer: {
                     Text(denied
                          ? "Notifications are off for 100 Days. Turn them on in Settings → Notifications → 100 Days."
-                         : "One notification per meal. Press and hold it to log Ate it or Skipped without opening the app.")
+                         : "One notification per meal. Press and hold it and tap Ate it to check the meal off without opening the app.")
                 }
 
                 if enabled {
