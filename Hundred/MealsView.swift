@@ -75,14 +75,15 @@ struct MealDayForm: View {
     @AppStorage(MealReminders.enabledKey) private var remindersOn = false
 
     var body: some View {
-        let meals = MealPlan.meals(for: ProteinPlan(rawValue: planRaw) ?? .both)
+        let plan = ProteinPlan(rawValue: planRaw) ?? .both
+        let meals = MealPlan.meals(for: plan, on: log.day)
         let eaten = meals.filter { log[$0.meal] == true }
 
         ScrollView {
             VStack(spacing: 20) {
                 MealsHeader(day: log.day,
                             eaten: eaten,
-                            target: MealPlan.target(for: ProteinPlan(rawValue: planRaw) ?? .both),
+                            target: MealPlan.target(for: plan, on: log.day),
                             mealCount: meals.count)
                     .padding(.horizontal, 4)
 

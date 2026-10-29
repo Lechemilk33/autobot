@@ -42,13 +42,20 @@ enum ProteinPlan: String, CaseIterable, Identifiable {
 
     var summary: String {
         switch self {
-        case .both: "Chicken at lunch, beef at dinner. 3.5 lb of each."
+        case .both: "Chicken at lunch, beef at dinner, and beef for Sunday lunch. 4 one-pound packs of beef, 3 lb of chicken."
         case .chicken: "Chicken at lunch and dinner. 7 lb."
-        case .beef: "Ground beef at lunch and dinner. 7 lb."
+        case .beef: "Ground beef at lunch and dinner. 7 one-pound packs, one a day."
         }
     }
 
-    fileprivate var lunch: Protein { self == .beef ? .beef : .chicken }
+    /// With both meats, Sunday's lunch is beef so the 1 lb packs split evenly into 8 meals.
+    fileprivate func lunch(on day: Date) -> Protein {
+        switch self {
+        case .chicken: .chicken
+        case .beef: .beef
+        case .both: Calendar.current.component(.weekday, from: day) == 1 ? .beef : .chicken
+        }
+    }
     fileprivate var dinner: Protein { self == .chicken ? .chicken : .beef }
 }
 
@@ -96,7 +103,7 @@ private enum Protein {
                         kcal: 623, protein: 59)
         case .beef:
             PlannedMeal(meal: meal, when: when, name: "Beef + rice", symbol: symbol, color: color,
-                        items: ["8 oz raw 90/10 ground beef (about 6 oz cooked), taco seasoning, cooked in butter",
+                        items: ["Half a 1 lb pack of 90/10 ground beef, taco seasoning, cooked in butter",
                                 "1½ cups cooked white rice"],
                         kcal: 751, protein: 51)
         }
@@ -104,12 +111,12 @@ private enum Protein {
 }
 
 enum MealPlan {
-    static func meals(for plan: ProteinPlan) -> [PlannedMeal] {
+    static func meals(for plan: ProteinPlan, on day: Date = .now) -> [PlannedMeal] {
         [
             PlannedMeal(meal: .morning, when: "Morning", name: "Coffee + eggs", symbol: "cup.and.saucer.fill", color: .orange,
                         items: ["2 Keurig coffees, 2 tbsp creamer each", "3 eggs, cooked in butter"],
                         kcal: 390, protein: 19),
-            plan.lunch.meal(.lunch, when: "Lunch", symbol: "fork.knife", color: .yellow),
+            plan.lunch(on: day).meal(.lunch, when: "Lunch", symbol: "fork.knife", color: .yellow),
             PlannedMeal(meal: .smoothie, when: "Afternoon", name: "Smoothie", symbol: "takeoutbag.and.cup.and.straw.fill", color: .pink,
                         items: ["1½ cups 2% milk", "1 scoop ISO100 Fruity Pebbles", "1½ cups frozen strawberry-banana blend",
                                 "2 tbsp peanut butter", "A handful of spinach"],
@@ -121,18 +128,20 @@ enum MealPlan {
         ]
     }
 
-    static func target(for plan: ProteinPlan) -> MacroTotals {
-        meals(for: plan).reduce(MacroTotals(kcal: 0, protein: 0)) {
+    static func target(for plan: ProteinPlan, on day: Date = .now) -> MacroTotals {
+        meals(for: plan, on: day).reduce(MacroTotals(kcal: 0, protein: 0)) {
             MacroTotals(kcal: $0.kcal + $1.kcal, protein: $0.protein + $1.protein)
         }
     }
 
     static func groceries(for plan: ProteinPlan) -> [GrocerySection] {
         let meat: [GroceryItem] = switch plan {
-        case .both: [GroceryItem(id: "chicken", name: "Chicken breast", amount: "3.5 lb"),
-                     GroceryItem(id: "beef", name: "90/10 ground beef", amount: "3.5 lb")]
+        case .both: [GroceryItem(id: "chicken", name: "Chicken breast", amount: "3 lb", note: "6 lunches, 8 oz each"),
+                     GroceryItem(id: "beef", name: "90/10 ground beef", amount: "4 × 1 lb packs",
+                                 note: "Each pack is 2 meals: 7 dinners + Sunday lunch")]
         case .chicken: [GroceryItem(id: "chicken", name: "Chicken breast", amount: "7 lb")]
-        case .beef: [GroceryItem(id: "beef", name: "90/10 ground beef", amount: "7 lb")]
+        case .beef: [GroceryItem(id: "beef", name: "90/10 ground beef", amount: "7 × 1 lb packs",
+                                 note: "One pack a day: half at lunch, half at dinner")]
         }
         return [
             GrocerySection(title: "Every week", items: meat + [
