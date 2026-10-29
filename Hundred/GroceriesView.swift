@@ -2,21 +2,16 @@ import SwiftUI
 
 /// The Groceries tab: one week of the meal plan as a checklist for the store.
 struct GroceriesView: View {
-    @AppStorage(ProteinPlan.storageKey) private var planRaw = ProteinPlan.both.rawValue
     /// Comma-separated ids of the items already in the cart.
     @AppStorage("groceriesChecked") private var checkedRaw = ""
     @State private var confirmingClear = false
-
-    private var plan: Binding<ProteinPlan> {
-        Binding(get: { ProteinPlan(rawValue: planRaw) ?? .both }, set: { planRaw = $0.rawValue })
-    }
 
     private var checked: Set<String> {
         Set(checkedRaw.split(separator: ",").map(String.init))
     }
 
     var body: some View {
-        let sections = MealPlan.groceries(for: plan.wrappedValue)
+        let sections = MealPlan.groceries
         let items = sections.flatMap(\.items)
         let inCart = items.filter { checked.contains($0.id) }.count
 
@@ -32,18 +27,6 @@ struct GroceriesView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 4)
-
-                    GlassCard("Protein this week") {
-                        Picker("Protein this week", selection: plan) {
-                            ForEach(ProteinPlan.allCases) { option in
-                                Text(option.label).tag(option)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        Text(plan.wrappedValue.summary)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
 
                     ForEach(sections) { section in
                         GlassCard(section.title) {
@@ -75,8 +58,6 @@ struct GroceriesView: View {
             .navigationTitle("Groceries")
         }
         .sensoryFeedback(.selection, trigger: checkedRaw)
-        // Lunch and dinner reminders name the meat, so keep them in step with the plan.
-        .onChange(of: planRaw) { MealReminders.reschedule() }
     }
 
     private func toggle(_ id: String) {

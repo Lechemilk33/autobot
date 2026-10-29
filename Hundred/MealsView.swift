@@ -71,19 +71,17 @@ struct MealDayView: View {
 
 struct MealDayForm: View {
     @Bindable var log: MealLog
-    @AppStorage(ProteinPlan.storageKey) private var planRaw = ProteinPlan.both.rawValue
     @AppStorage(MealReminders.enabledKey) private var remindersOn = false
 
     var body: some View {
-        let plan = ProteinPlan(rawValue: planRaw) ?? .both
-        let meals = MealPlan.meals(for: plan, on: log.day)
+        let meals = MealPlan.meals
         let eaten = meals.filter { log[$0.meal] == true }
 
         ScrollView {
             VStack(spacing: 20) {
                 MealsHeader(day: log.day,
                             eaten: eaten,
-                            target: MealPlan.target(for: plan, on: log.day),
+                            target: MealPlan.target,
                             mealCount: meals.count)
                     .padding(.horizontal, 4)
 
@@ -176,7 +174,6 @@ struct MealCard: View {
 
 struct RemindersSheet: View {
     @AppStorage(MealReminders.enabledKey) private var enabled = false
-    @AppStorage(ProteinPlan.storageKey) private var planRaw = ProteinPlan.both.rawValue
     @State private var times: [Meal: Date] = Dictionary(uniqueKeysWithValues: Meal.allCases.map { ($0, MealReminders.time(for: $0)) })
     @State private var denied = false
     @Environment(\.dismiss) private var dismiss
@@ -194,7 +191,7 @@ struct RemindersSheet: View {
 
                 if enabled {
                     Section("Times") {
-                        ForEach(MealPlan.meals(for: ProteinPlan(rawValue: planRaw) ?? .both)) { planned in
+                        ForEach(MealPlan.meals) { planned in
                             DatePicker(planned.when, selection: time(for: planned.meal), displayedComponents: .hourAndMinute)
                         }
                     }

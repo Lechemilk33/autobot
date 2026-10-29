@@ -37,40 +37,28 @@ enum MealReminders {
         reschedule()
     }
 
-    /// Replaces every pending meal reminder with the current times and menu. Each meal repeats
-    /// weekly per weekday, because Sunday's lunch can be a different meat.
+    /// Replaces every pending meal reminder with the current times.
     static func reschedule() {
         let center = UNUserNotificationCenter.current()
-        let weekdays = 1...7
-        center.removePendingNotificationRequests(withIdentifiers: Meal.allCases.flatMap { meal in
-            weekdays.map { identifier(meal, weekday: $0) }
-        })
+        center.removePendingNotificationRequests(withIdentifiers: Meal.allCases.map(\.rawValue))
         guard UserDefaults.standard.bool(forKey: enabledKey) else { return }
 
-        let plan = ProteinPlan.current
-        for weekday in weekdays {
-            guard let date = Calendar.current.nextDate(after: .now, matching: DateComponents(weekday: weekday),
-                                                       matchingPolicy: .nextTime) else { continue }
-            for planned in MealPlan.meals(for: plan, on: date) {
-                let content = UNMutableNotificationContent()
-                content.title = planned.when
-                content.body = "\(planned.name). Did you eat it?"
-                content.sound = .default
-                content.categoryIdentifier = categoryID
-                content.userInfo = ["meal": planned.meal.rawValue]
+        for planned in MealPlan.meals {
+            let content = UNMutableNotificationContent()
+            content.title = planned.when
+            content.body = "\(planned.name). Did you eat it?"
+            content.sound = .default
+            content.categoryIdentifier = categoryID
+            content.userInfo = ["meal": planned.meal.rawValue]
 
-                let total = minutes(for: planned.meal)
-                let trigger = UNCalendarNotificationTrigger(
-                    dateMatching: DateComponents(hour: total / 60, minute: total % 60, weekday: weekday), repeats: true)
-                center.add(UNNotificationRequest(identifier: identifier(planned.meal, weekday: weekday),
-                                                 content: content, trigger: trigger))
-            }
+            let total = minutes(for: planned.meal)
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: DateComponents(hour: total / 60, minute: total % 60), repeats: true)
+            center.add(UNNotificationRequest(identifier: planned.meal.rawValue, content: content, trigger: trigger))
         }
     }
 
     private static func timeKey(_ meal: Meal) -> String { "mealTime." + meal.rawValue }
-
-    private static func identifier(_ meal: Meal, weekday: Int) -> String { "\(meal.rawValue)-\(weekday)" }
 }
 
 /// Shows meal reminders while the app is open, and saves "Ate it" / "Skipped"
