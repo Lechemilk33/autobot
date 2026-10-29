@@ -29,6 +29,8 @@ Every answer is optional. **nil = unanswered and never counts as "No"** — this
 - 1–10: Mood, Energy, Sex drive
 - Yes/No: Worked out, Gallon of water, Drank alcohol, Smoked weed, Had sex,
   Fight or argument (a short note field appears when Yes)
+- Workout score 1-10 ("How was it"), shown only when Worked out is Yes. Answering No or
+  clearing it wipes the score, so a score never outlives the workout it described.
 - Caffeine counts: Coffee (cups) and Energy drinks (cans), 0-6 each.
   These are the only two caffeine sources worth tracking - don't add more.
   **0 means "none today" and is a real answer; nil is still unanswered.**
@@ -54,8 +56,14 @@ Not tracked on purpose: food, exact water amount, sleep (the Oura ring already h
 **Design rule:** glass is for cards, the ring, tiles and bars only. Controls *inside* a card use
 solid fills (`Color.white.opacity(0.08)`) — no glass on glass.
 
-`DayEntry.questionCount` is 14 and must stay in sync with `answeredCount`, or the completion
-ring never fills. It counts 3 ratings + 6 yes/no + 2 caffeine + weight + 2 photos.
+`DayEntry.questionCount` must stay in sync with `answeredCount`, or the completion ring never
+fills. It is **per entry, not a constant**: 14 normally (3 ratings + 6 yes/no + 2 caffeine +
+weight + 2 photos), and 15 on a day you worked out, when the workout score joins them. That
+way the ring still reaches full on a rest day.
+
+**Before Day 1** the header reads "Starts tomorrow" / "Starts in N days" instead of a day
+number, and the day stays editable so it can be used for a trial run. `Challenge.dayNumber`
+returns 0 the day before Day 1 and goes negative before that.
 
 **Photos:** stored as `@Attribute(.externalStorage) Data?` on `DayEntry`, downscaled to 1600px
 JPEG at 0.8 quality before saving — full-resolution captures would run to hundreds of MB over

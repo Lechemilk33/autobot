@@ -83,7 +83,8 @@ struct CheckInForm: View {
             VStack(spacing: 20) {
                 DayHeader(day: entry.day,
                           dayNumber: Challenge.dayNumber(of: entry.day, start: challengeStart),
-                          answered: entry.answeredCount)
+                          answered: entry.answeredCount,
+                          total: entry.questionCount)
                     .padding(.horizontal, 4)
 
                 GlassCard("How you feel") {
@@ -95,6 +96,11 @@ struct CheckInForm: View {
                 GlassCard("Checklist") {
                     YesNoRow(title: "Worked out", symbol: "figure.run", color: .red,
                              goal: true, value: $entry.workedOut)
+                    if entry.workedOut == true {
+                        RatingRow(title: "How was it", symbol: "chart.bar.fill", color: .red,
+                                  value: $entry.workoutScore)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
+                    }
                     YesNoRow(title: "Gallon of water", symbol: "drop.fill", color: .cyan,
                              goal: true, value: $entry.drankGallonOfWater)
                     YesNoRow(title: "Drank alcohol", symbol: "wineglass.fill", color: .purple,
@@ -148,6 +154,10 @@ struct CheckInForm: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 24)
         }
+        .onChange(of: entry.workedOut) { _, didWorkOut in
+            // Don't keep a score for a workout that no longer happened.
+            if didWorkOut != true { entry.workoutScore = nil }
+        }
         .scrollDismissesKeyboard(.interactively)
         .toolbar {
             // The decimal pad has no return key, so give the keyboard a way to close.
@@ -164,6 +174,15 @@ struct DayHeader: View {
     let day: Date
     let dayNumber: Int
     let answered: Int
+    let total: Int
+
+    /// dayNumber is 0 the day before Day 1, -1 the day before that, and so on.
+    private var startsText: String {
+        switch dayNumber {
+        case 0: "Starts tomorrow"
+        default: "Starts in \(1 - dayNumber) days"
+        }
+    }
 
     var body: some View {
         HStack(spacing: 16) {
@@ -172,16 +191,24 @@ struct DayHeader: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(dayNumber >= 1 ? "Day \(dayNumber)" : "Day –")
-                        .font(.system(size: 50, weight: .bold))
-                    Text("/ \(Challenge.length)")
-                        .font(.title3.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                    if dayNumber >= 1 {
+                        Text("Day \(dayNumber)")
+                            .font(.system(size: 50, weight: .bold))
+                        Text("/ \(Challenge.length)")
+                            .font(.title3.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    } else {
+                        // Before Day 1: say so rather than showing a dash. The day is
+                        // still editable, so it works for a trial run.
+                        Text(startsText)
+                            .font(.system(size: 34, weight: .bold))
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 ChallengeBar(progress: Double(dayNumber) / Double(Challenge.length))
             }
             Spacer(minLength: 0)
-            CompletionRing(answered: answered, total: DayEntry.questionCount)
+            CompletionRing(answered: answered, total: total)
         }
     }
 }

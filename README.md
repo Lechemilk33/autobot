@@ -11,6 +11,7 @@ Built with SwiftUI + SwiftData and Apple's Liquid Glass design (iOS 26+), no thi
 | Energy                  | 1–10   |
 | Sex drive               | 1–10   |
 | Work out                | Yes/No |
+| How was the workout     | 1–10, only if you worked out |
 | Drink a gallon of water | Yes/No |
 | Drink alcohol           | Yes/No |
 | Smoke weed              | Yes/No |

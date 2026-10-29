@@ -17,6 +17,8 @@ final class DayEntry {
 
     // Yes / no
     var workedOut: Bool? = nil
+    /// How good the workout was, 1-10. Only meaningful when `workedOut` is true.
+    var workoutScore: Int? = nil
     var drankGallonOfWater: Bool? = nil
     var drankAlcohol: Bool? = nil
     var smokedWeed: Bool? = nil
@@ -40,14 +42,17 @@ final class DayEntry {
 }
 
 extension DayEntry {
-    /// Ratings + yes/no questions + caffeine counts + weight + the two photos.
-    static let questionCount = 14
+    /// 3 ratings + 6 yes/no + 2 caffeine counts + weight + 2 photos, and on a day
+    /// you worked out, the workout score as well. It varies per day, so the ring
+    /// can still reach full on a rest day.
+    var questionCount: Int { 14 + (workedOut == true ? 1 : 0) }
 
     var answeredCount: Int {
         let ratings = [mood, energy, sexDrive].compactMap { $0 }.count
         let answers = [workedOut, drankGallonOfWater, drankAlcohol, smokedWeed, hadSex, fought].compactMap { $0 }.count
         let caffeine = [coffeeCups, energyDrinks].compactMap { $0 }.count
-        return ratings + answers + caffeine + (weight == nil ? 0 : 1) + photoCount
+        let score = (workedOut == true && workoutScore != nil) ? 1 : 0
+        return ratings + answers + caffeine + score + (weight == nil ? 0 : 1) + photoCount
     }
 
     var photoCount: Int { [facePhoto, bodyPhoto].compactMap { $0 }.count }
